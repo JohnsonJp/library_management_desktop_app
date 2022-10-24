@@ -29,17 +29,22 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  flutter:
+    sdk: flutter
+  
+  
   csv: 5.0.0
   cupertino_icons: ^1.0.2
   file_picker: ^5.2.2
   fluent_ui: ^4.0.2
-  flutter:
-    sdk: flutter
+  font_awesome_flutter: ^10.2.1
   mysql_utils: ^2.1.1
   overlay_support: ^2.0.1
   path_provider: ^2.0.2
   provider: ^6.0.4
   window_manager: ^0.2.7
+  email_validator: ^2.1.17
+  flutter_acrylic: ^1.0.0+2
 
 dev_dependencies:
 

@@ -1,15 +1,13 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:library_management_desktop_app/model/book.dart';
-import 'package:library_management_desktop_app/pages/widgets/books_page.dart';
 import 'package:library_management_desktop_app/provider/books_provider.dart';
-import 'package:library_management_desktop_app/sql/sql.dart';
 import 'package:provider/provider.dart';
 
-class ContentDialogBox extends StatefulWidget {
+class BookContetBox extends StatefulWidget {
   final int? uniqueid;
   final String? name, authour, givento;
   final bool? isavail;
-  const ContentDialogBox(
+  const BookContetBox(
       {super.key,
       this.uniqueid,
       this.name,
@@ -18,10 +16,10 @@ class ContentDialogBox extends StatefulWidget {
       this.isavail});
 
   @override
-  State<ContentDialogBox> createState() => _ContentDialogBoxState();
+  State<BookContetBox> createState() => _BookContetBoxState();
 }
 
-class _ContentDialogBoxState extends State<ContentDialogBox> {
+class _BookContetBoxState extends State<BookContetBox> {
   TextEditingController uniqueid = TextEditingController();
   TextEditingController name = TextEditingController();
   TextEditingController authour = TextEditingController();

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:library_management_desktop_app/model/book.dart';
 import 'package:library_management_desktop_app/pages/widgets/books_page.dart';
 import 'package:library_management_desktop_app/provider/books_provider.dart';
@@ -13,7 +13,6 @@ class BookPage extends StatefulWidget {
 }
 
 class _BookPageState extends State<BookPage> {
-  TextEditingController searchtext = TextEditingController();
   late Future<List<Book>> getBooksFuture;
 
   @override
@@ -38,7 +37,7 @@ class _BookPageState extends State<BookPage> {
                   return BooksPage();
                 }
 
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: ProgressRing());
               },
             )
           : BooksPage();

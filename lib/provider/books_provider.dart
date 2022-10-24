@@ -8,12 +8,13 @@ class BooksProvider extends ChangeNotifier {
   List<Book> searchResult = [];
 
   String searchType = "Book";
+  bool isreturn=false;
   bool searching = false;
 
   Future<void> searchBooks(String searchTerm) async {
-    searching = searchTerm.isNotEmpty;
+    searching = true;
 
-    searchResult = await SqlHelper().searchBook(searchTerm, searchType);
+    searchResult = await SqlHelper().searchBook(searchTerm, searchType,isreturn);
 
     notifyListeners();
   }

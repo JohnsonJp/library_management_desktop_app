@@ -5,15 +5,13 @@ import 'package:library_management_desktop_app/provider/books_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/book.dart';
-import '../../utils/contentdialog.dart';
+import '../../utils/bookcontentdialog.dart';
 
 class BooksPage extends StatelessWidget {
-  BooksPage({super.key});
-
-  List<Book> books = [];
-
+  const BooksPage({super.key});
   @override
   Widget build(BuildContext context) {
+    List<Book> books = [];
     return Consumer<BooksProvider>(
       builder: (_, BooksProvider booksProvider, __) {
         if (booksProvider.searching) {
@@ -116,7 +114,7 @@ class BooksPage extends StatelessWidget {
                                 showDialog(
                                   context: context,
                                   builder: (context) {
-                                    return ContentDialogBox(
+                                    return BookContetBox(
                                       uniqueid: books[i].uniqueid,
                                       name: books[i].name,
                                       authour: books[i].authour,
@@ -159,7 +157,8 @@ class BookPageSearchBar extends StatefulWidget {
 }
 
 class _BookPageSearchBarState extends State<BookPageSearchBar> {
-  String Searchobject = "Book";
+  String searchobject = "Book";
+  bool isreturn = false;
 
   @override
   Widget build(BuildContext context) {
@@ -170,15 +169,16 @@ class _BookPageSearchBarState extends State<BookPageSearchBar> {
           Expanded(
             flex: 2,
             child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: FittedBox(
+              padding: const EdgeInsets.only(right: 10),
+              child: SizedBox(
+                height: 40,
                 child: DropDownButton(
-                  title: Text(Searchobject),
+                  title: Text(searchobject),
                   items: [
                     DropDownButtonItem(
                       onTap: () {
                         setState(() {
-                          Searchobject = "Book";
+                          searchobject = "Book";
                         });
 
                         Provider.of<BooksProvider>(context, listen: false)
@@ -190,7 +190,7 @@ class _BookPageSearchBarState extends State<BookPageSearchBar> {
                     DropDownButtonItem(
                       onTap: () {
                         setState(() {
-                          Searchobject = "Staff";
+                          searchobject = "Staff";
                         });
 
                         Provider.of<BooksProvider>(context, listen: false)
@@ -206,20 +206,36 @@ class _BookPageSearchBarState extends State<BookPageSearchBar> {
           ),
           Expanded(
             flex: 10,
-            child: TextFormBox(
-                onChanged: (value) {
-                  booksProvider.searchBooks(value);
-                },
-                minHeight: 40,
-                placeholder:
-                    Searchobject == "Book" ? 'Book name' : 'Staff name',
-                validator: (text) {
-                  if (text == null || text.isEmpty) {
-                    return 'Provide a book name';
-                  }
-                  return null;
-                }),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 10.0),
+              child: TextFormBox(
+                  onChanged: (value) {
+                    booksProvider.searchBooks(value);
+                  },
+                  minHeight: 40,
+                  placeholder:
+                      searchobject == "Book" ? 'Book name' : 'Staff name',
+                  validator: (text) {
+                    if (text == null || text.isEmpty) {
+                      return 'Provide a book name';
+                    }
+                    return null;
+                  }),
+            ),
           ),
+          Expanded(
+              flex: 3,
+              child: ToggleSwitch(
+                checked: isreturn,
+                onChanged: (v) {
+                  setState(() {
+                    isreturn = v;
+                  });
+                  booksProvider.isreturn = isreturn;
+                  booksProvider.searchBooks("");
+                },
+                content: const Text('Not return'),
+              )),
         ],
       );
     });
