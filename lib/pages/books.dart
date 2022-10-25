@@ -28,6 +28,7 @@ class _BookPageState extends State<BookPage> {
       return booksProvider.books.isEmpty
           ? FutureBuilder(
               future: getBooksFuture,
+
               builder: (_, AsyncSnapshot future) {
                 if (future.hasError) throw future.error!;
 

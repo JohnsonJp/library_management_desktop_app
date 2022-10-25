@@ -2,8 +2,10 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:library_management_desktop_app/pages/Staff.dart';
 import 'package:library_management_desktop_app/pages/addbook.dart';
+import 'package:library_management_desktop_app/pages/addborrow.dart';
 import 'package:library_management_desktop_app/pages/addstaff.dart';
 import 'package:library_management_desktop_app/pages/books.dart';
+import 'package:library_management_desktop_app/pages/borrow.dart';
 import 'package:library_management_desktop_app/pages/excel.dart';
 import 'package:library_management_desktop_app/provider/app_state.dart';
 import 'package:library_management_desktop_app/provider/books_provider.dart';
@@ -25,8 +27,6 @@ Future<void> main() async {
       TitleBarStyle.hidden,
       windowButtonVisibility: false,
     );
-    await windowManager.setSize(const Size(760, 545));
-    await windowManager.setMinimumSize(const Size(350, 600));
     await windowManager.center();
     await windowManager.show();
     await windowManager.setPreventClose(false);
@@ -125,6 +125,16 @@ class _HomeState extends State<Home> {
               icon: const FaIcon(FontAwesomeIcons.userPlus),
               body: const AddStaff(),
               title: const Text("Add Staff"),
+            ),
+            PaneItem(
+              icon: const FaIcon(FontAwesomeIcons.arrowsDownToPeople),
+              body: const BorrowPage(),
+              title: const Text("Borrow page"),
+            ),
+            PaneItem(
+              icon: const FaIcon(FontAwesomeIcons.arrowRightArrowLeft),
+              body: const AddBorrow(),
+              title: const Text("Book borrow/lend"),
             ),
             PaneItem(
               icon: const FaIcon(FontAwesomeIcons.fileExcel),

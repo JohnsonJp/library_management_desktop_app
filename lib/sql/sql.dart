@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'dart:ffi';
 import 'package:library_management_desktop_app/model/book.dart';
+import 'package:library_management_desktop_app/model/borrow.dart';
 import 'package:library_management_desktop_app/model/staff.dart';
 import 'package:mysql_utils/mysql_utils.dart';
 
@@ -91,6 +93,19 @@ class SqlHelper {
     await db.close();
   }
 
+  Future<Book?> isavailable(int bookid) async {
+    db = openDb();
+    List book = await db.getAll(
+        table: 'book', where: {'uniqueid': bookid}, debug: true);
+    await db.close();
+
+    if (book.isNotEmpty) {
+      return book.map((e) => Book.fromMap(e)).first;
+    }
+
+    return null;
+  }
+
   List<Staff> staffs = [];
   //staff table
   Future<List<Staff>> getStaffs() async {
@@ -142,5 +157,57 @@ class SqlHelper {
       debug: true,
     );
     await db.close();
+  }
+
+  //borrow table
+  List<Borrow> borrows = [];
+
+  Future<void> insertBorrow(Borrow borrow) async {
+    db = openDb();
+    await db.insert(table: 'borrow', insertData: borrow.toMap());
+    await db.update(
+        table: 'book',
+        updateData: {'givento': borrow.staffid, 'isavailable': false},
+        where: {'uniqueid': borrow.uniqueid});
+    await db.close();
+  }
+
+  Future<void> getborrow() async {
+    db = openDb();
+    List borrow1 = await db.getAll(table: 'borrow', fields: '*', debug: true);
+    await db.close();
+
+    borrows = borrow1.map((e) => Borrow.fromMap(e)).toList();
+
+    print(borrows);
+    // return borrow;
+  }
+
+  Future<void> updateBorrow(Borrow borrow) async {
+    db = openDb();
+    await db.update(table: 'borrow', updateData: {
+      'returndate': borrow.returndate
+    }, where: {
+      'uniqueid': borrow.uniqueid,
+      'staffid': borrow.staffid,
+      'givendate': borrow.givendate
+    });
+
+    await db.update(
+        table: 'book',
+        updateData: {'givento': null, 'isavailable': true},
+        where: {'uniqueid': borrow.uniqueid});
+
+    await db.close();
+  }
+
+  late Borrow borrowinfo;
+  Future<Borrow> getBorrowInformation(int uniqueid) async {
+    db = openDb();
+    List borrow1 =
+        await db.getAll(table: 'borrow', where: {'uniqueid': uniqueid});
+
+    borrowinfo = borrow1.map((e) => Borrow.fromMap(e)).toList().first;
+    return borrowinfo;
   }
 }
