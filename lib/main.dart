@@ -9,6 +9,7 @@ import 'package:library_management_desktop_app/pages/borrow.dart';
 import 'package:library_management_desktop_app/pages/excel.dart';
 import 'package:library_management_desktop_app/provider/app_state.dart';
 import 'package:library_management_desktop_app/provider/books_provider.dart';
+import 'package:library_management_desktop_app/provider/borrow_provider.dart';
 import 'package:library_management_desktop_app/provider/staffs_provider.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,8 @@ import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  AppState appState = AppState()..init();
 
   windowManager.setMinimumSize(const Size(780, 700));
 
@@ -27,17 +30,19 @@ Future<void> main() async {
       TitleBarStyle.hidden,
       windowButtonVisibility: false,
     );
-    await windowManager.center();
+    // await windowManager.center();
     await windowManager.show();
     await windowManager.setPreventClose(false);
     await windowManager.setSkipTaskbar(false);
   });
 
-  runApp(const MyApp());
+  runApp(MyApp(appState: appState));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key, required this.appState});
+
+  AppState appState;
 
   // This widget is the root of your application.
   @override
@@ -45,15 +50,19 @@ class MyApp extends StatelessWidget {
     return OverlaySupport.global(
       child: MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => AppState()),
+          ChangeNotifierProvider(create: (_) => appState),
           ChangeNotifierProvider(create: (_) => BooksProvider()),
           ChangeNotifierProvider(create: (_) => StaffProvider()),
+          ChangeNotifierProvider(create: (_) => BorrowProvider()),
         ],
-        builder: (_, __) => FluentApp(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(brightness: Brightness.dark),
-          home: const Home(),
-        ),
+        builder: (_, __) =>
+            Consumer<AppState>(builder: (_, AppState appState, __) {
+          return FluentApp(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(brightness: appState.currentBrightness),
+            home: const Home(),
+          );
+        }),
       ),
     );
   }
@@ -76,6 +85,16 @@ class _HomeState extends State<Home> {
       key: viewKey,
       appBar: NavigationAppBar(
         actions: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+          Consumer<AppState>(builder: (_, AppState appState, __) {
+            return ToggleSwitch(
+              checked: appState.currentBrightness == Brightness.dark,
+              onChanged: (value) async {
+                await Provider.of<AppState>(context, listen: false)
+                    .toggleBrightness();
+              },
+              content: const Text("Dark Mode"),
+            );
+          }),
           SizedBox(
             width: 138,
             height: 50,

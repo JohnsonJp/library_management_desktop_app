@@ -8,13 +8,14 @@ class BooksProvider extends ChangeNotifier {
   List<Book> searchResult = [];
 
   String searchType = "Book";
-  bool isreturn=false;
+  bool isreturn = false;
   bool searching = false;
 
   Future<void> searchBooks(String searchTerm) async {
     searching = true;
 
-    searchResult = await SqlHelper().searchBook(searchTerm, searchType,isreturn);
+    searchResult =
+        await SqlHelper().searchBook(searchTerm, searchType, isreturn);
 
     notifyListeners();
   }
@@ -25,7 +26,7 @@ class BooksProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateBooks(Book book) async {
+  Future<void> updateBook(Book book) async {
     await SqlHelper().updateBook(book);
 
     Book existingBook =
@@ -42,4 +43,6 @@ class BooksProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  void rebuildWidgets() => notifyListeners();
 }

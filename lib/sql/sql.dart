@@ -172,15 +172,14 @@ class SqlHelper {
     await db.close();
   }
 
-  Future<void> getborrow() async {
+  Future<List<Borrow>> getborrow() async {
     db = openDb();
     List borrow1 = await db.getAll(table: 'borrow', fields: '*', debug: true);
     await db.close();
 
     borrows = borrow1.map((e) => Borrow.fromMap(e)).toList();
 
-    print(borrows);
-    // return borrow;
+    return borrows;
   }
 
   Future<void> updateBorrow(Borrow borrow) async {
@@ -209,5 +208,16 @@ class SqlHelper {
 
     borrowinfo = borrow1.map((e) => Borrow.fromMap(e)).toList().first;
     return borrowinfo;
+  }
+
+  Future<bool> checkUser(int id) async {
+    db = openDb();
+
+    int count = await db.count(
+      table: "staff",
+      where: {"staffid": id},
+    );
+
+    return count > 0;
   }
 }

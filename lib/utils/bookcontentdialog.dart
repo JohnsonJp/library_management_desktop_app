@@ -137,7 +137,7 @@ class _BookContetBoxState extends State<BookContetBox> {
                             await Provider.of<BooksProvider>(
                               context,
                               listen: false,
-                            ).updateBooks(
+                            ).updateBook(
                               Book(
                                 uniqueid: int.parse(uniqueid.text),
                                 name: name.text,

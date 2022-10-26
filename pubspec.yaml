@@ -29,30 +29,26 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  flutter:
-    sdk: flutter
-  
-  
   csv: 5.0.0
   cupertino_icons: ^1.0.2
+  email_validator: ^2.1.17
   file_picker: ^5.2.2
   fluent_ui: ^4.0.2
+  flutter:
+    sdk: flutter
+  flutter_acrylic: ^1.0.0+2
   font_awesome_flutter: ^10.2.1
+  forme: ^4.2.1
+  forme_base_fields: ^2.3.1
   mysql_utils: ^2.1.1
   overlay_support: ^2.0.1
   path_provider: ^2.0.2
   provider: ^6.0.4
+  read_barcode: ^1.0.1
+  shared_preferences: ^2.0.15
   window_manager: ^0.2.7
-  email_validator: ^2.1.17
-  flutter_acrylic: ^1.0.0+2
 
 dev_dependencies:
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
