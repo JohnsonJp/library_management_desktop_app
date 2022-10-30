@@ -27,46 +27,82 @@ class _ExcelPageState extends State<ExcelPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Spacer(),
-          Button(
-            child: const Text("Hey"),
-            onPressed: () async {
-              String? path = await _openFileExplorer();
+          SizedBox(
+            height: 50,
+            width: 200,
+            child: Button(
+              child: const Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Text("Upload book from excel"),
+              ),
+              onPressed: () async {
+                String? path = await _openFileExplorer();
 
-              File f = File(path!);
+                File f = File(path!);
 
-              final input = f.openRead();
-              List fields = await input
-                  .transform(utf8.decoder)
-                  .transform(const CsvToListConverter())
-                  .toList();
+                final input = f.openRead();
+                List fields = await input
+                    .transform(utf8.decoder)
+                    .transform(const CsvToListConverter())
+                    .toList();
 
-              for (int i = 1; i < fields.length; i++) {
-                log("passed");
-                Book book = Book(
-                  authour: fields[i][1],
-                  isavailable: (fields[i][3] == "TRUE") ? true : false,
-                  uniqueid: fields[i][0],
-                  name: fields[i][2],
-                );
+                for (int i = 1; i < fields.length; i++) {
+                  log("passed");
+                  Book book = Book(
+                    authour: fields[i][1],
+                    isavailable: (fields[i][3] == "TRUE") ? true : false,
+                    uniqueid: fields[i][0],
+                    name: fields[i][2],
+                  );
 
-                await SqlHelper().insertBook(book);
+                  await SqlHelper().insertBook(book);
 
-                if (i == fields.length - 1) {
-                  if (mounted) {
-                    setState(() {
-                      _visible = true;
-                    });
-                  } else {
-                    showSimpleNotification(
-                      const Text("this is a message from simple notification"),
-                      background: Colors.green,
-                      duration: const Duration(seconds: 7),
-                      position: NotificationPosition.bottom,
-                    );
+                  if (i == fields.length - 1) {
+                    if (mounted) {
+                      setState(() {
+                        _visible = true;
+                      });
+                    } else {
+                      showSimpleNotification(
+                        const Text(
+                            "Book Data from Excel imported Successfully"),
+                        background: Colors.green,
+                        duration: const Duration(seconds: 7),
+                        position: NotificationPosition.bottom,
+                      );
+                    }
                   }
                 }
-              }
-            },
+              },
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          SizedBox(
+            height: 50,
+            width: 200,
+            child: Button(
+              onPressed: () {},
+              child: const Padding(
+                padding: EdgeInsets.all(10),
+                child: Text("Backup Data"),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+           SizedBox(
+            height: 50,
+            width: 200,
+            child: Button(
+              onPressed: () {},
+              child: const Padding(
+                padding: EdgeInsets.all(10),
+                child: Text("Import Data"),
+              ),
+            ),
           ),
           const Spacer(),
           if (_visible)

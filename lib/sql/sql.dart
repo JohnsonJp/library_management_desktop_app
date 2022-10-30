@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:ffi';
 import 'package:library_management_desktop_app/model/book.dart';
 import 'package:library_management_desktop_app/model/borrow.dart';
 import 'package:library_management_desktop_app/model/staff.dart';
@@ -174,13 +173,24 @@ class SqlHelper {
 
   Future<List<Borrow>> getborrow() async {
     db = openDb();
-    List borrow1 = await db.getAll(table: 'borrow', fields: '*', debug: true);
-    await db.close();
+    ResultFormat rs = await db.query(
+        ' select book.name as bookname,borrow.uniqueid,borrow.id,borrow.staffid,staff.name as staffname,borrow.givendate,borrow.returndate  from borrow left join book on borrow.uniqueid=book.uniqueid left join staff on borrow.staffid=staff.staffid;');
+    borrows = rs.rows.map((e) => Borrow.fromMap(e)).toList();
 
-    borrows = borrow1.map((e) => Borrow.fromMap(e)).toList();
+    db.close();
 
-    return borrows;
+    return rs.rows.map((e) => Borrow.fromMap(e)).toList();
   }
+
+  // Future<List<Borrow>> getborrow() async {
+  //   db = openDb();
+  //   List borrow1 = await db.getAll(table: 'borrow', fields: '*', debug: true);
+  //   await db.close();
+
+  //   borrows = borrow1.map((e) => Borrow.fromMap(e)).toList();
+
+  //   return borrows;
+  // }
 
   Future<void> updateBorrow(Borrow borrow) async {
     db = openDb();
@@ -217,6 +227,18 @@ class SqlHelper {
       table: "staff",
       where: {"staffid": id},
     );
+
+    return count > 0;
+  }
+
+  Future<bool> checkBook(int id) async {
+    db = openDb();
+
+    int count = await db.count(
+      table: "book",
+      where: {"uniqueid": id},
+    );
+    log(count.toString());
 
     return count > 0;
   }

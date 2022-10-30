@@ -30,20 +30,39 @@ class BorrowPage extends StatelessWidget {
                         title: Row(
                           children: const [
                             Expanded(
-                              flex: 4,
-                              child: Text("Unique Id"),
+                              flex: 1,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 5),
+                                child: Text("Id"),
+                              ),
                             ),
                             Expanded(
                               flex: 4,
-                              child: Text("Staff Id"),
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 5),
+                                child: Text("Book name"),
+                              ),
                             ),
                             Expanded(
-                              flex: 4,
-                              child: Text("Given Data"),
+                              flex: 2,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 5),
+                                child: Text("Staff name"),
+                              ),
                             ),
                             Expanded(
-                              flex: 4,
-                              child: Text("Return Date"),
+                              flex: 2,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 5),
+                                child: Text("Given Data"),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 5),
+                                child: Text("Return Date"),
+                              ),
                             ),
                           ],
                         ),
@@ -54,30 +73,46 @@ class BorrowPage extends StatelessWidget {
                     child: ListView.builder(
                       itemCount: borrowProvider.history.length,
                       itemBuilder: (_, index) {
-                        return SizedBox(
-                          height: 40,
-                          child: Row(
+                        return ListTile(
+                          title: Row(
                             children: [
                               Expanded(
-                                flex: 4,
-                                child: Text(borrowProvider
-                                    .history[index].uniqueid
-                                    .toString()),
+                                flex: 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: Text(borrowProvider.history[index].id
+                                      .toString()),
+                                ),
                               ),
                               Expanded(
                                 flex: 4,
-                                child: Text(borrowProvider
-                                    .history[index].staffid
-                                    .toString()),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: Text(borrowProvider
+                                      .history[index].bookname
+                                      .toString()),
+                                ),
                               ),
                               Expanded(
-                                flex: 4,
-                                child: Text(borrowProvider
-                                    .history[index].givendate
-                                    .toString()),
+                                flex: 2,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: Text(borrowProvider
+                                      .history[index].staffname
+                                      .toString()),
+                                ),
                               ),
                               Expanded(
-                                flex: 4,
+                                flex: 2,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: Text(borrowProvider
+                                      .history[index].givendate
+                                      .toString()),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 2,
                                 child: Text(
                                     (borrowProvider.history[index].returndate ??
                                             "Not returned")

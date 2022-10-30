@@ -2,29 +2,41 @@
 import 'dart:convert';
 
 class Borrow {
+  int? id;
   int uniqueid;
   int staffid;
   DateTime givendate;
   DateTime? returndate;
+  String? staffname;
+  String? bookname;
+
   Borrow({
+    this.id,
     required this.uniqueid,
     required this.staffid,
     required this.givendate,
     this.returndate,
+    this.staffname,
+    this.bookname,
   });
- 
 
   Borrow copyWith({
+    int? id,
     int? uniqueid,
     int? staffid,
     DateTime? givendate,
     DateTime? returndate,
+    String? staffname,
+    String? bookname,
   }) {
     return Borrow(
+      id: id ?? this.id,
       uniqueid: uniqueid ?? this.uniqueid,
       staffid: staffid ?? this.staffid,
       givendate: givendate ?? this.givendate,
       returndate: returndate ?? this.returndate,
+      staffname: staffname ?? this.staffname,
+      bookname: bookname ?? this.bookname,
     );
   }
 
@@ -33,44 +45,54 @@ class Borrow {
       'uniqueid': uniqueid,
       'staffid': staffid,
       'givendate': givendate,
-      'returndate': returndate,
+      'returndate': returndate
     };
   }
 
   factory Borrow.fromMap(Map<String, dynamic> map) {
     return Borrow(
+      id: map['id'] != null ? map['id'] as int : null,
       uniqueid: map['uniqueid'] as int,
       staffid: map['staffid'] as int,
-      givendate: DateTime.parse(map['givendate'] ),
-      returndate: map['returndate'] != null ? DateTime.parse(map['returndate']) : null,
+      givendate: DateTime.parse(map['givendate']),
+      returndate:
+          map['returndate'] != null ? DateTime.parse(map['returndate']) : null,
+      staffname: map['staffname'] != null ? map['staffname'] as String : null,
+      bookname: map['bookname'] != null ? map['bookname'] as String : null,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Borrow.fromJson(String source) => Borrow.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Borrow.fromJson(String source) =>
+      Borrow.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'Borrow(uniqueid: $uniqueid, staffid: $staffid, givendate: $givendate, returndate: $returndate)';
+    return 'Borrow(id: $id, uniqueid: $uniqueid, staffid: $staffid, givendate: $givendate, returndate: $returndate, staffname: $staffname, bookname: $bookname)';
   }
 
   @override
   bool operator ==(covariant Borrow other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.uniqueid == uniqueid &&
-      other.staffid == staffid &&
-      other.givendate == givendate &&
-      other.returndate == returndate;
+
+    return other.id == id &&
+        other.uniqueid == uniqueid &&
+        other.staffid == staffid &&
+        other.givendate == givendate &&
+        other.returndate == returndate &&
+        other.staffname == staffname &&
+        other.bookname == bookname;
   }
 
   @override
   int get hashCode {
-    return uniqueid.hashCode ^
-      staffid.hashCode ^
-      givendate.hashCode ^
-      returndate.hashCode;
+    return id.hashCode ^
+        uniqueid.hashCode ^
+        staffid.hashCode ^
+        givendate.hashCode ^
+        returndate.hashCode ^
+        staffname.hashCode ^
+        bookname.hashCode;
   }
 }

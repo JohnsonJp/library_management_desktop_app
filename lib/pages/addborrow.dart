@@ -54,6 +54,11 @@ class _AddBorrowState extends State<AddBorrow> {
                   controller: bookid,
                   onChanged: (value) async {
                     if (value.length > 4) {
+                      istrue = false;
+                      isborrowed = false;
+                      staffid.text = "";
+                      redate = DateTime.now();
+
                       Book? book =
                           await SqlHelper().isavailable(int.parse(value));
                       if (book != null) {
@@ -94,42 +99,37 @@ class _AddBorrowState extends State<AddBorrow> {
               ),
               SizedBox(
                 height: 60,
-                child: Visibility(
-                  visible: istrue,
-                  child: TextFormBox(
-                      onChanged: (value) async {
-                        if (value.length > 2) {
-                          staffavail =
-                              await SqlHelper().checkUser(int.parse(value));
+                child: (bookid.text.isNotEmpty && !istrue)
+                    ? const Text("No book found")
+                    : Visibility(
+                        visible: istrue,
+                        child: TextFormBox(
+                            onChanged: (value) async {
+                              if (value.length > 2) {
+                                staffavail = await SqlHelper()
+                                    .checkUser(int.parse(value));
 
-                          log(staffavail.toString());
+                                log(staffavail.toString());
 
-                          setState(() {});
-                        }
-                      },
-                      controller: staffid,
-                      minHeight: 40,
-                      placeholder: 'Staff id',
-                      validator: (text) {
-                        if (text == null || text.isEmpty) {
-                          return 'Provide a Staff id';
-                        } else if (!staffavail) {
-                          return 'Staff Not found';
-                        }
+                                setState(() {});
+                              }
+                            },
+                            controller: staffid,
+                            minHeight: 40,
+                            placeholder: 'Staff id',
+                            validator: (text) {
+                              if (text == null || text.isEmpty) {
+                                return 'Provide a Staff id';
+                              } else if (!staffavail) {
+                                return 'Staff Not found';
+                              }
 
-                        return null;
-                      }),
-                ),
+                              return null;
+                            }),
+                      ),
               ),
               const SizedBox(
                 height: 10,
-              ),
-              SizedBox(
-                height: 16,
-                child: Visibility(
-                  visible: bookid.text.isNotEmpty && !istrue,
-                  child: const Text("No Books Found"),
-                ),
               ),
               SizedBox(
                 height: 60,

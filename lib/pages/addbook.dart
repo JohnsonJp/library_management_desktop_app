@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:library_management_desktop_app/model/book.dart';
@@ -18,6 +20,7 @@ class _AddBookState extends State<AddBook> {
   TextEditingController givento = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isavail = true;
+  bool bookavail = false;
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +38,17 @@ class _AddBookState extends State<AddBook> {
                   controller: uniqueid,
                   minHeight: 40,
                   placeholder: 'Unique ID',
+                  onChanged: (value) async {
+                    if (value.length > 4) {
+                      bookavail = await SqlHelper().checkBook(int.parse(value));
+                    }
+                    setState(() {});
+                  },
                   validator: (text) {
                     if (text == null || text.isEmpty) {
                       return 'Provide a unique id';
+                    } else if (bookavail) {
+                      return 'Book already present in database';
                     }
                     return null;
                   }),
@@ -76,9 +87,9 @@ class _AddBookState extends State<AddBook> {
                     checked: isavail,
                     content: const Text("Is available"),
                     onChanged: (value) {
-                      setState(() {
-                        isavail = value;
-                      });
+                      // setState(() {
+                      //   isavail = value;
+                      // });
                     },
                   ),
                 ],

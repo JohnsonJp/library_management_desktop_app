@@ -160,10 +160,16 @@ class _BookPageSearchBarState extends State<BookPageSearchBar> {
   String searchobject = "Book";
   bool isreturn = false;
 
+  TextEditingController bookNameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Consumer<BooksProvider>(
         builder: (_, BooksProvider booksProvider, __) {
+      if (bookNameController.text.isEmpty) {
+        bookNameController.text = booksProvider.currentSearchTerm ?? "";
+      }
+
       return Row(
         children: [
           Expanded(
@@ -209,6 +215,7 @@ class _BookPageSearchBarState extends State<BookPageSearchBar> {
             child: Padding(
               padding: const EdgeInsets.only(right: 10.0),
               child: TextFormBox(
+                  controller: bookNameController,
                   onChanged: (value) {
                     booksProvider.searchBooks(value);
                   },
@@ -225,17 +232,17 @@ class _BookPageSearchBarState extends State<BookPageSearchBar> {
           ),
           Expanded(
               flex: 3,
-              child: ToggleSwitch(
-                checked: isreturn,
-                onChanged: (v) {
-                  setState(() {
-                    isreturn = v;
-                  });
-                  booksProvider.isreturn = isreturn;
-                  booksProvider.searchBooks("");
-                },
-                content: const Text('Not return'),
-              )),
+              child: Consumer(builder: (_, BooksProvider booksProvider, __) {
+                return ToggleSwitch(
+                  checked: booksProvider.isreturn,
+                  onChanged: (v) {
+                    booksProvider.isreturn = !booksProvider.isreturn;
+                    booksProvider
+                        .searchBooks(booksProvider.currentSearchTerm ?? "");
+                  },
+                  content: const Text('Not return'),
+                );
+              })),
         ],
       );
     });

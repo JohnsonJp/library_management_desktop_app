@@ -10,8 +10,10 @@ class BooksProvider extends ChangeNotifier {
   String searchType = "Book";
   bool isreturn = false;
   bool searching = false;
+  String? currentSearchTerm;
 
   Future<void> searchBooks(String searchTerm) async {
+    currentSearchTerm = searchTerm;
     searching = true;
 
     searchResult =

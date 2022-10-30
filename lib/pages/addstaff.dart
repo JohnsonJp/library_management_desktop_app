@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +19,7 @@ class _AddStaffState extends State<AddStaff> {
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool staffavail = false;
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +37,22 @@ class _AddStaffState extends State<AddStaff> {
                   controller: staffid,
                   minHeight: 40,
                   placeholder: 'staff ID',
+                  onChanged: (value) async {
+                    if (value.length > 2) {
+                      staffavail =
+                          await SqlHelper().checkUser(int.parse(value));
+
+                      log(staffavail.toString());
+
+                      setState(() {});
+                    }
+                    ;
+                  },
                   validator: (text) {
                     if (text == null || text.isEmpty) {
                       return 'Provide a staff id';
+                    } else if (staffavail) {
+                      return 'Staff already available in database';
                     }
                     return null;
                   }),

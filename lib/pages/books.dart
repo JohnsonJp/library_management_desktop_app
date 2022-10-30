@@ -35,13 +35,13 @@ class _BookPageState extends State<BookPage> {
                 if (future.connectionState == ConnectionState.done) {
                   booksProvider.books = future.data;
 
-                  return BooksPage();
+                  return const BooksPage();
                 }
 
                 return const Center(child: ProgressRing());
               },
             )
-          : BooksPage();
+          : const BooksPage();
     });
   }
 }

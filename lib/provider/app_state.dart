@@ -10,18 +10,19 @@ class AppState extends ChangeNotifier {
 
   Future<void> init() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("is dark : ${prefs.getBool('isDark')}");
 
-    if (prefs.getBool("isDark") ?? false) {
-      currentBrightness = Brightness.light;
-    } else {
+    if (prefs.getBool("isDark") ?? true) {
       currentBrightness = Brightness.dark;
+    } else {
+      currentBrightness = Brightness.light;
     }
   }
 
   Future<void> toggleBrightness() async {
     currentBrightness = currentBrightness == Brightness.dark
         ? Brightness.light
-        :Brightness.dark;
+        : Brightness.dark;
 
     (await SharedPreferences.getInstance())
         .setBool("isDark", currentBrightness == Brightness.dark);

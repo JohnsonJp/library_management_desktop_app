@@ -93,9 +93,9 @@ class _BookContetBoxState extends State<BookContetBox> {
                         checked: isavail,
                         content: const Text("Is available"),
                         onChanged: (value) {
-                          setState(() {
-                            isavail = value;
-                          });
+                          // setState(() {
+                          //   isavail = value;
+                          // });
                         },
                       ),
                     ],
