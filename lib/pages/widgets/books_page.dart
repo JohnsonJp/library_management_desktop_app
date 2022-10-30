@@ -227,6 +227,7 @@ class _BookPageSearchBarState extends State<BookPageSearchBar> {
               padding: const EdgeInsets.only(right: 10.0),
               child: TextFormBox(
                   suffix: Visibility(
+                    visible: showicon,
                     child: IconButton(
                       icon: const FaIcon(FontAwesomeIcons.close),
                       onPressed: () {
