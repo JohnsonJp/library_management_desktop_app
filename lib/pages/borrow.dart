@@ -17,6 +17,11 @@ class BorrowPage extends StatelessWidget {
         if (future.connectionState == ConnectionState.done) {
           return Consumer<BorrowProvider>(
               builder: (_, BorrowProvider borrowProvider, __) {
+            if (future.data!.isEmpty) {
+              return const Center(
+                child: Text("No Borrow's found..."),
+              );
+            }
             borrowProvider.history = future.data!;
 
             return Container(

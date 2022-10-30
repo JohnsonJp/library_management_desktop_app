@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:library_management_desktop_app/model/staff.dart';
 import 'package:library_management_desktop_app/provider/staffs_provider.dart';
 import 'package:library_management_desktop_app/utils/staffcontentbox.dart';
@@ -153,13 +154,43 @@ class BookPageSearchBar extends StatefulWidget {
 }
 
 class _BookPageSearchBarState extends State<BookPageSearchBar> {
+  TextEditingController staffNamecontroller = TextEditingController();
+  bool showcancel = false;
 
   @override
   Widget build(BuildContext context) {
     return Consumer<StaffProvider>(
         builder: (_, StaffProvider staffProvider, __) {
+      staffNamecontroller.text.isEmpty
+          ? staffNamecontroller.text = staffProvider.searchtermstaff ?? ""
+          : null;
+      showcancel = staffNamecontroller.text.isNotEmpty;
       return TextFormBox(
+          suffix: Visibility(
+            visible: showcancel,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 10.0, top: 5, bottom: 5),
+              child: IconButton(
+                onPressed: () {
+                  Provider.of<StaffProvider>(context, listen: false)
+                      .searchtermstaff = "";
+                  setState(() {
+                    staffNamecontroller.text = "";
+                  });
+                },
+                icon: const Center(
+                  child: FaIcon(
+                    FontAwesomeIcons.close,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          controller: staffNamecontroller,
           onChanged: (value) {
+            setState(() {
+              showcancel = value.isNotEmpty;
+            });
             staffProvider.searchStaffs(value);
           },
           minHeight: 40,

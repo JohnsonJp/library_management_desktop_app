@@ -32,15 +32,20 @@ class _StaffPageState extends State<StaffPage> {
                 if (future.hasError) throw future.error!;
 
                 if (future.connectionState == ConnectionState.done) {
+                  if (future.data!.isEmpty) {
+                    return const Center(
+                      child: Text("No Staff's found..."),
+                    );
+                  }
                   staffProvider.staffs = future.data;
 
-                  return StaffsPage();
+                  return const StaffsPage();
                 }
 
                 return const Center(child: ProgressRing());
               },
             )
-          : StaffsPage();
+          : const StaffsPage();
     });
   }
 }

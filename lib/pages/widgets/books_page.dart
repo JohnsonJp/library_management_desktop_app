@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:library_management_desktop_app/provider/books_provider.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
@@ -167,6 +168,7 @@ class BookPageSearchBar extends StatefulWidget {
 class _BookPageSearchBarState extends State<BookPageSearchBar> {
   String searchobject = "Book";
   bool isreturn = false;
+  bool showicon = false;
 
   TextEditingController bookNameController = TextEditingController();
 
@@ -177,6 +179,7 @@ class _BookPageSearchBarState extends State<BookPageSearchBar> {
       if (bookNameController.text.isEmpty) {
         bookNameController.text = booksProvider.currentSearchTerm ?? "";
       }
+      showicon = bookNameController.text.isNotEmpty;
 
       return Row(
         children: [
@@ -223,6 +226,18 @@ class _BookPageSearchBarState extends State<BookPageSearchBar> {
             child: Padding(
               padding: const EdgeInsets.only(right: 10.0),
               child: TextFormBox(
+                  suffix: Visibility(
+                    child: IconButton(
+                      icon: const FaIcon(FontAwesomeIcons.close),
+                      onPressed: () {
+                        Provider.of<BooksProvider>(context, listen: false)
+                            .currentSearchTerm = "";
+                        setState(() {
+                          bookNameController.text = "";
+                        });
+                      },
+                    ),
+                  ),
                   controller: bookNameController,
                   onChanged: (value) {
                     booksProvider.searchBooks(value);
