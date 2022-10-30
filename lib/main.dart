@@ -121,7 +121,6 @@ class _HomeState extends State<Home> {
           selected: selectedindex,
           onChanged: (value) {
             setState(() {
-              
               selectedindex = value;
             });
           },
@@ -157,9 +156,9 @@ class _HomeState extends State<Home> {
               title: const Text("Book borrow/lend"),
             ),
             PaneItem(
-              icon: const FaIcon(FontAwesomeIcons.fileExcel),
+              icon: const FaIcon(FontAwesomeIcons.gears),
               body: const ExcelPage(),
-              title: const Text("upload Excel"),
+              title: const Text("Services "),
             ),
           ]),
     );

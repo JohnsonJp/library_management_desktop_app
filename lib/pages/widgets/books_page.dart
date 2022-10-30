@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:library_management_desktop_app/provider/books_provider.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/book.dart';
@@ -62,8 +63,8 @@ class BooksPage extends StatelessWidget {
                     title: Row(
                       children: const [
                         Expanded(
-                          flex: 4,
-                          child: Text("Unique Id"),
+                          flex: 3,
+                          child: Text("Id"),
                         ),
                         Expanded(
                           flex: 10,
@@ -95,7 +96,7 @@ class BooksPage extends StatelessWidget {
                       title: Row(
                         children: [
                           Expanded(
-                            flex: 4,
+                            flex: 3,
                             child: Text(books[i].uniqueid.toString()),
                           ),
                           Expanded(
@@ -132,6 +133,13 @@ class BooksPage extends StatelessWidget {
                               icon: const Icon(FluentIcons.delete),
                               onPressed: () async {
                                 booksProvider.removeBook(books[i]);
+
+                                showSimpleNotification(
+                                  const Text("Book deleted successfully"),
+                                  background: Colors.blue,
+                                  duration: const Duration(seconds: 2),
+                                  position: NotificationPosition.bottom,
+                                );
                               },
                             ),
                           ),

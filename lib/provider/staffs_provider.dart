@@ -7,18 +7,18 @@ class StaffProvider extends ChangeNotifier {
   List<Staff> searchResult = [];
 
   bool searching = false;
-
-
+  String? searchtermstaff;
 
   Future<void> searchStaffs(String searchTerm) async {
     searching = searchTerm.isNotEmpty;
+    searchtermstaff = searchTerm;
 
     searchResult = await SqlHelper().searchStaffs(searchTerm);
 
     notifyListeners();
   }
 
-  void setBooks(List<Staff> staffs) {
+  void setStaffs(List<Staff> staffs) {
     this.staffs = staffs;
 
     notifyListeners();

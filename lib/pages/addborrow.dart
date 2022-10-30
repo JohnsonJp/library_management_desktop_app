@@ -7,6 +7,7 @@ import 'package:library_management_desktop_app/model/borrow.dart';
 import 'package:library_management_desktop_app/provider/books_provider.dart';
 import 'package:library_management_desktop_app/provider/borrow_provider.dart';
 import 'package:library_management_desktop_app/sql/sql.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'package:read_barcode/read_barcode.dart';
 
@@ -224,6 +225,14 @@ class _AddBorrowState extends State<AddBorrow> {
                                 isborrowed = false;
                                 istrue = false;
                               });
+
+                              showSimpleNotification(
+                                Text(
+                                    "${isborrowed ? "Lended" : "Borrowed"} successfully"),
+                                background: Colors.green,
+                                duration: const Duration(seconds: 2),
+                                position: NotificationPosition.bottom,
+                              );
                             }
                           },
                         ),

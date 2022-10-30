@@ -24,6 +24,13 @@ class SqlHelper {
       },
       errorLog: (error) {
         log(error);
+        if (error == "MySQLServerException [1146]: Table 'lib_man.book' doesn't exist" ||
+            error ==
+                "MySQLServerException [1146]: Table 'lib_man.borrow' doesn't exist" ||
+            error ==
+                "MySQLServerException [1146]: Table 'lib_man.staff' doesn't exist") {
+          createTable();
+        }
       },
       sqlLog: (sql) {
         log(sql);
@@ -33,6 +40,36 @@ class SqlHelper {
       },
     );
     return db1;
+  }
+
+  Future createTable() async {
+    db = openDb();
+
+    await db.query('''create database if not exists lib_man''');
+
+    await db.query('''CREATE TABLE IF NOT EXISTS book(
+   name text     NOT NULL,
+   authour text     NOT NULL,
+   uniqueid int NOT NULL,
+   isavailable bool NOT NULL,
+   givento text   
+);''');
+
+    await db.query('''CREATE TABLE IF NOT EXISTS staff(
+   name text     NOT NULL,
+   email text     NOT NULL,
+   staffid int NOT NULL
+);''');
+
+    await db.query('''CREATE TABLE IF NOT EXISTS borrow(
+	id int primary key auto_increment,
+   uniqueid int NOT NULL,
+   staffid int NOT NULL,
+   givendate datetime not null,
+   returndate datetime
+);''');
+
+    await db.close();
   }
 
   //books table

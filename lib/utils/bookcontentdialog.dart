@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:library_management_desktop_app/model/book.dart';
 import 'package:library_management_desktop_app/provider/books_provider.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 
 class BookContetBox extends StatefulWidget {
@@ -145,6 +146,13 @@ class _BookContetBoxState extends State<BookContetBox> {
                                 isavailable: isavail,
                                 givento: givento.text,
                               ),
+                            );
+
+                            showSimpleNotification(
+                              const Text("Book updated successfully"),
+                              background: Colors.green,
+                              duration: const Duration(seconds: 2),
+                              position: NotificationPosition.bottom,
                             );
 
                             Navigator.pop(context);

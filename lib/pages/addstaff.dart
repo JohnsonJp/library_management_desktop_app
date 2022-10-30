@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:library_management_desktop_app/model/staff.dart';
 import 'package:library_management_desktop_app/provider/staffs_provider.dart';
 import 'package:library_management_desktop_app/sql/sql.dart';
+import 'package:overlay_support/overlay_support.dart';
+import 'package:provider/provider.dart';
 
 class AddStaff extends StatefulWidget {
   const AddStaff({super.key});
@@ -36,7 +38,7 @@ class _AddStaffState extends State<AddStaff> {
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   controller: staffid,
                   minHeight: 40,
-                  placeholder: 'staff ID',
+                  placeholder: 'Staff ID',
                   onChanged: (value) async {
                     if (value.length > 2) {
                       staffavail =
@@ -112,7 +114,7 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         );
 
-                        StaffProvider().staffs.add(
+                       Provider.of<StaffProvider>(context,listen: false).staffs.add(
                               Staff(
                                 staffid: int.parse(staffid.text),
                                 name: name.text,
@@ -125,6 +127,13 @@ class _AddStaffState extends State<AddStaff> {
                           name.text = "";
                           email.text = "";
                         });
+
+                        showSimpleNotification(
+                          const Text("User added successfully"),
+                          background: Colors.blue,
+                          duration: const Duration(seconds: 2),
+                          position: NotificationPosition.bottom,
+                        );
                       }
                     },
                   ),

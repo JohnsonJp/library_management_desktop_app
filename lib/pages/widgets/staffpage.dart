@@ -5,7 +5,7 @@ import 'package:library_management_desktop_app/utils/staffcontentbox.dart';
 import 'package:provider/provider.dart';
 
 class StaffsPage extends StatelessWidget {
-  StaffsPage({super.key});
+  const StaffsPage({super.key});
 
   @override
   Widget build(BuildContext context) {

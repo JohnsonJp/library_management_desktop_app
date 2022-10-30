@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:library_management_desktop_app/model/staff.dart';
 import 'package:library_management_desktop_app/provider/staffs_provider.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 
 class StaffContentBox extends StatefulWidget {
@@ -81,7 +82,6 @@ class _StaffContentBoxState extends State<StaffContentBox> {
                   const SizedBox(
                     height: 10,
                   ),
-                  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -102,11 +102,21 @@ class _StaffContentBoxState extends State<StaffContentBox> {
                               context,
                               listen: false,
                             ).updateStaffs(
-                          Staff(staffid: widget.staffid!, name: name.text, email: email.text),
+                              Staff(
+                                  staffid: widget.staffid!,
+                                  name: name.text,
+                                  email: email.text),
                             );
 
                             Navigator.pop(context);
                           }
+
+                          showSimpleNotification(
+                            const Text("User updated successfully"),
+                            background: Colors.blue,
+                            duration: const Duration(seconds: 2),
+                            position: NotificationPosition.bottom,
+                          );
                         },
                       ),
                     ],

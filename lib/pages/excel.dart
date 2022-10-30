@@ -31,6 +31,22 @@ class _ExcelPageState extends State<ExcelPage> {
             height: 50,
             width: 200,
             child: Button(
+                child: const Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text("Create Table"),
+                ),
+                onPressed: () async {
+                  await SqlHelper().createTable();
+                }),
+          ),
+         
+          const SizedBox(
+            height: 10,
+          ),
+          SizedBox(
+            height: 50,
+            width: 200,
+            child: Button(
               child: const Padding(
                 padding: EdgeInsets.all(10.0),
                 child: Text("Upload book from excel"),
@@ -93,7 +109,7 @@ class _ExcelPageState extends State<ExcelPage> {
           const SizedBox(
             height: 10,
           ),
-           SizedBox(
+          SizedBox(
             height: 50,
             width: 200,
             child: Button(

@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:library_management_desktop_app/model/book.dart';
 import 'package:library_management_desktop_app/provider/books_provider.dart';
 import 'package:library_management_desktop_app/sql/sql.dart';
+import 'package:overlay_support/overlay_support.dart';
+import 'package:provider/provider.dart';
 
 class AddBook extends StatefulWidget {
   const AddBook({super.key});
@@ -139,7 +141,7 @@ class _AddBookState extends State<AddBook> {
                           ),
                         );
 
-                        BooksProvider().books.add(
+                        Provider.of<BooksProvider>(context,listen: false).books.add(
                               Book(
                                 uniqueid: int.parse(uniqueid.text),
                                 name: name.text,
@@ -154,6 +156,13 @@ class _AddBookState extends State<AddBook> {
                         uniqueid.text = "";
                         givento.text = "";
                         isavail = true;
+
+                        showSimpleNotification(
+                          const Text("Book added successfully"),
+                          background: Colors.blue,
+                          duration: const Duration(seconds: 2),
+                          position: NotificationPosition.bottom,
+                        );
                       }
                     },
                   ),
