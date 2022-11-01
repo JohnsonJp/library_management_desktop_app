@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AppState extends ChangeNotifier {
   Brightness currentBrightness = Brightness.dark;
 
+  double importProgress = 0;
+
   AppState() {
     init();
   }
@@ -26,6 +28,12 @@ class AppState extends ChangeNotifier {
 
     (await SharedPreferences.getInstance())
         .setBool("isDark", currentBrightness == Brightness.dark);
+
+    notifyListeners();
+  }
+
+  set updateImportProgress(double value) {
+    importProgress = value;
 
     notifyListeners();
   }

@@ -49,6 +49,15 @@ class Borrow {
     };
   }
 
+  Map<String, dynamic> toMapJsonSafe() {
+    return <String, dynamic>{
+      'uniqueid': uniqueid,
+      'staffid': staffid,
+      'givendate': givendate.toString(),
+      'returndate': returndate.toString()
+    };
+  }
+
   factory Borrow.fromMap(Map<String, dynamic> map) {
     return Borrow(
       id: map['id'] != null ? map['id'] as int : null,
@@ -62,10 +71,20 @@ class Borrow {
     );
   }
 
-  String toJson() => json.encode(toMap());
+  String toJson() => json.encode(toMapJsonSafe());
 
   factory Borrow.fromJson(String source) =>
       Borrow.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  factory Borrow.fromSafeJson(String source) {
+    Map<String, dynamic> data = json.decode(source) as Map<String, dynamic>;
+
+    data["givendate"] = data["givendate"] == "null" ? null : data["givendate"];
+    data["returndate"] =
+        data["returndate"] == "null" ? null : data["returndate"];
+
+    return Borrow.fromMap(data);
+  }
 
   @override
   String toString() {

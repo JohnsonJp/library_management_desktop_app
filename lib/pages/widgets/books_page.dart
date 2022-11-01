@@ -232,7 +232,8 @@ class _BookPageSearchBarState extends State<BookPageSearchBar> {
                       icon: const FaIcon(FontAwesomeIcons.close),
                       onPressed: () {
                         Provider.of<BooksProvider>(context, listen: false)
-                            .currentSearchTerm = "";
+                            .searchBooks("");
+
                         setState(() {
                           bookNameController.text = "";
                         });
