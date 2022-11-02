@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:library_management_desktop_app/model/book.dart';
 
@@ -14,7 +16,9 @@ class BooksProvider extends ChangeNotifier {
 
   Future<void> searchBooks(String searchTerm) async {
     currentSearchTerm = searchTerm;
-    searching = searchTerm.isNotEmpty;
+    searching = searchTerm.isNotEmpty || isreturn;
+
+    log(searching.toString());
 
     searchResult =
         await SqlHelper().searchBook(searchTerm, searchType, isreturn);

@@ -83,19 +83,15 @@ class _AddBookState extends State<AddBook> {
               const SizedBox(
                 height: 10,
               ),
-              Row(
-                children: [
-                  ToggleSwitch(
-                    checked: isavail,
-                    content: const Text("Is available"),
-                    onChanged: (value) {
-                      // setState(() {
-                      //   isavail = value;
-                      // });
-                    },
-                  ),
-                ],
-              ),
+              // ToggleSwitch(
+              //   checked: isavail,
+              //   content: const Text("Is available"),
+              //   onChanged: (value) {
+              //     // setState(() {
+              //     //   isavail = value;
+              //     // });
+              //   },
+              // ),
               if (!isavail)
                 const SizedBox(
                   height: 10,

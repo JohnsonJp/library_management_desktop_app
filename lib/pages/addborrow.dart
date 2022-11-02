@@ -180,8 +180,8 @@ class _AddBorrowState extends State<AddBorrow> {
                         ),
                         TextButton(
                           child: (isborrowed)
-                              ? const Text("Lend")
-                              : const Text("Borrow"),
+                              ? const Text("Borrow")
+                              : const Text("Lend"),
                           onPressed: () {
                             if (formkey.currentState!.validate()) {
                               BorrowProvider borrowProvider =
@@ -228,7 +228,7 @@ class _AddBorrowState extends State<AddBorrow> {
 
                               showSimpleNotification(
                                 Text(
-                                    "${isborrowed ? "Lended" : "Borrowed"} successfully"),
+                                    "${isborrowed ? "Borrowed" : "Lended"} successfully"),
                                 background: Colors.green,
                                 duration: const Duration(seconds: 2),
                                 position: NotificationPosition.bottom,

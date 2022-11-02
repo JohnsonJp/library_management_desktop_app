@@ -13,9 +13,6 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../model/borrow.dart';
-import '../model/staff.dart';
-
 class ExcelPage extends StatefulWidget {
   const ExcelPage({super.key});
 
@@ -67,7 +64,7 @@ class _ExcelPageState extends State<ExcelPage> {
                     .transform(const CsvToListConverter())
                     .toList();
 
-                for (int i = 150; i < fields.length; i++) {
+                for (int i = 0; i < fields.length; i++) {
                   log("passed ${fields[i].toString()}");
                   Book book = Book(
                     authour: fields[i][1],
