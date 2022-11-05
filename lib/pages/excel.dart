@@ -42,61 +42,81 @@ class _ExcelPageState extends State<ExcelPage> {
                   await SqlHelper().createTable();
                 }),
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 20),
           SizedBox(
-            height: 50,
+            height: 60,
             width: 200,
-            child: Button(
-              child: const Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text("Upload book from excel"),
-              ),
-              onPressed: () async {
-                String? path = await _openFileExplorer();
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Button(
+                  child: const Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: Text("Upload book from excel"),
+                  ),
+                  onPressed: () async {
+                    AppState appState =
+                        Provider.of<AppState>(context, listen: false);
+                    SqlHelper sql = SqlHelper();
+                    sql.db = sql.openDb();
 
-                File f = File(path!);
+                    String? path = await _openFileExplorer();
 
-                final input = f.openRead();
-                List fields = await input
-                    .transform(utf8.decoder)
-                    .transform(const CsvToListConverter())
-                    .toList();
+                    File f = File(path!);
 
-                for (int i = 0; i < fields.length; i++) {
-                  log("passed ${fields[i].toString()}");
-                  Book book = Book(
-                    authour: fields[i][1],
-                    isavailable: true,
-                    uniqueid: fields[i][0],
-                    name: fields[i][2],
-                  );
+                    final input = f.openRead();
+                    List fields = await input
+                        .transform(utf8.decoder)
+                        .transform(const CsvToListConverter())
+                        .toList();
 
-                  await SqlHelper().insertBook(book);
-
-                  if (i == fields.length - 1) {
-                    if (mounted) {
-                      setState(() {
-                        _visible = true;
-                      });
-                    } else {
-                      showSimpleNotification(
-                        const Text(
-                            "Book Data from Excel imported Successfully"),
-                        background: Colors.green,
-                        duration: const Duration(seconds: 7),
-                        position: NotificationPosition.bottom,
+                    for (int i = 1; i < fields.length; i++) {
+                      log("passed ${fields[i].toString()}");
+                      Book book = Book(
+                        authour: fields[i][1],
+                        isavailable: true,
+                        uniqueid: fields[i][0],
+                        name: fields[i][2],
                       );
+
+                      await sql.importBook(book.toMap());
+                      appState.updateImportBookFromExcelProgress =
+                          (i / fields.length) * 100;
+
+                      if (i == fields.length - 1) {
+                        if (mounted) {
+                          setState(() {
+                            _visible = true;
+                          });
+                        } else {
+                          showSimpleNotification(
+                            const Text(
+                                "Book Data from Excel imported Successfully"),
+                            background: Colors.green,
+                            duration: const Duration(seconds: 7),
+                            position: NotificationPosition.bottom,
+                          );
+                        }
+                      }
                     }
-                  }
-                }
-              },
+
+                    sql.closeDB();
+                    appState.updateImportBookFromExcelProgress = 0;
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child:
+                      Consumer<AppState>(builder: (_, AppState appState, __) {
+                    return appState.importBookFromExcel == 0
+                        ? const SizedBox()
+                        : ProgressBar(value: appState.importBookFromExcel);
+                  }),
+                ),
+              ],
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           SizedBox(
             height: 50,
             width: 200,
@@ -110,9 +130,7 @@ class _ExcelPageState extends State<ExcelPage> {
               ),
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 20),
           SizedBox(
             height: 60,
             width: 200,

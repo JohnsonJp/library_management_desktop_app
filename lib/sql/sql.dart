@@ -295,14 +295,14 @@ class SqlHelper {
   void closeDB() async => await db.close();
 
   Future<void> importBook(Map<String, dynamic> book) async {
-    await db.insert(table: 'book1 ', insertData: book);
+    await db.insert(table: 'book ', insertData: book);
   }
 
   Future<void> importStaff(Map<String, dynamic> staff) async {
-    await db.insert(table: 'staff1', insertData: staff);
+    await db.insert(table: 'staff', insertData: staff);
   }
 
   Future<void> importBorrow(Map<String, dynamic> borrow) async {
-    await db.insert(table: 'borrow1', insertData: borrow);
+    await db.insert(table: 'borrow', insertData: borrow);
   }
 }

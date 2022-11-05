@@ -5,6 +5,7 @@ class AppState extends ChangeNotifier {
   Brightness currentBrightness = Brightness.dark;
 
   double importProgress = 0;
+  double importBookFromExcel = 0;
 
   AppState() {
     init();
@@ -34,6 +35,12 @@ class AppState extends ChangeNotifier {
 
   set updateImportProgress(double value) {
     importProgress = value;
+
+    notifyListeners();
+  }
+
+  set updateImportBookFromExcelProgress(double value) {
+    importBookFromExcel = value;
 
     notifyListeners();
   }

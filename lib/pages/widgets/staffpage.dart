@@ -173,7 +173,8 @@ class _BookPageSearchBarState extends State<BookPageSearchBar> {
               child: IconButton(
                 onPressed: () {
                   Provider.of<StaffProvider>(context, listen: false)
-                      .searchtermstaff = "";
+                            .searchStaffs("");
+                      
                   setState(() {
                     staffNamecontroller.text = "";
                   });
