@@ -62,46 +62,48 @@ class _ExcelPageState extends State<ExcelPage> {
 
                     String? path = await _openFileExplorer();
 
-                    File f = File(path!);
+                    if (path != null) {
+                      File f = File(path!);
 
-                    final input = f.openRead();
-                    List fields = await input
-                        .transform(utf8.decoder)
-                        .transform(const CsvToListConverter())
-                        .toList();
+                      final input = f.openRead();
+                      List fields = await input
+                          .transform(utf8.decoder)
+                          .transform(const CsvToListConverter())
+                          .toList();
 
-                    for (int i = 1; i < fields.length; i++) {
-                      log("passed ${fields[i].toString()}");
-                      Book book = Book(
-                        authour: fields[i][1],
-                        isavailable: true,
-                        uniqueid: fields[i][0],
-                        name: fields[i][2],
-                      );
+                      for (int i = 1; i < fields.length; i++) {
+                        log("passed ${fields[i].toString()}");
+                        Book book = Book(
+                          authour: fields[i][1],
+                          isavailable: true,
+                          uniqueid: fields[i][0],
+                          name: fields[i][2],
+                        );
 
-                      await sql.importBook(book.toMap());
-                      appState.updateImportBookFromExcelProgress =
-                          (i / fields.length) * 100;
+                        await sql.importBook(book.toMap());
+                        appState.updateImportBookFromExcelProgress =
+                            (i / fields.length) * 100;
 
-                      if (i == fields.length - 1) {
-                        if (mounted) {
-                          setState(() {
-                            _visible = true;
-                          });
-                        } else {
-                          showSimpleNotification(
-                            const Text(
-                                "Book Data from Excel imported Successfully"),
-                            background: Colors.green,
-                            duration: const Duration(seconds: 7),
-                            position: NotificationPosition.bottom,
-                          );
+                        if (i == fields.length - 1) {
+                          if (mounted) {
+                            setState(() {
+                              _visible = true;
+                            });
+                          } else {
+                            showSimpleNotification(
+                              const Text(
+                                  "Book Data from Excel imported Successfully"),
+                              background: Colors.green,
+                              duration: const Duration(seconds: 7),
+                              position: NotificationPosition.bottom,
+                            );
+                          }
                         }
                       }
-                    }
 
-                    sql.closeDB();
-                    appState.updateImportBookFromExcelProgress = 0;
+                      sql.closeDB();
+                      appState.updateImportBookFromExcelProgress = 0;
+                    }
                   },
                 ),
                 Padding(

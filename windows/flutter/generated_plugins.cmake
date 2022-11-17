@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   flutter_acrylic
   screen_retriever
+  sentry_flutter
   window_manager
 )
 

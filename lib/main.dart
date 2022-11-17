@@ -7,6 +7,7 @@ import 'package:library_management_desktop_app/pages/addstaff.dart';
 import 'package:library_management_desktop_app/pages/books.dart';
 import 'package:library_management_desktop_app/pages/borrow.dart';
 import 'package:library_management_desktop_app/pages/excel.dart';
+import 'package:library_management_desktop_app/pages/stats.dart';
 import 'package:library_management_desktop_app/provider/app_state.dart';
 import 'package:library_management_desktop_app/provider/books_provider.dart';
 import 'package:library_management_desktop_app/provider/borrow_provider.dart';
@@ -15,11 +16,18 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   AppState appState = AppState()..init();
+
+  await SentryFlutter.init((options) {
+    options.dsn =
+        'https://4636065c01634182bbcd5a9e26418844@o4504172924370944.ingest.sentry.io/4504172926009344';
+    options.tracesSampleRate = 1.0;
+  }, appRunner: () => runApp(MyApp(appState: appState)));
 
   windowManager.setMinimumSize(const Size(780, 700));
 
@@ -35,8 +43,6 @@ Future<void> main() async {
     await windowManager.setPreventClose(false);
     await windowManager.setSkipTaskbar(false);
   });
-
-  runApp(MyApp(appState: appState));
 }
 
 class MyApp extends StatelessWidget {
@@ -126,6 +132,11 @@ class _HomeState extends State<Home> {
           },
           items: [
             PaneItem(
+              icon: const FaIcon(FontAwesomeIcons.home),
+              body: const Stats(),
+              title: const Text("Home"),
+            ),
+            PaneItem(
               icon: const FaIcon(FontAwesomeIcons.book),
               body: const BookPage(),
               title: const Text("Book"),
@@ -148,12 +159,12 @@ class _HomeState extends State<Home> {
             PaneItem(
               icon: const FaIcon(FontAwesomeIcons.arrowsDownToPeople),
               body: const BorrowPage(),
-              title: const Text("Borrow page"),
+              title: const Text("Borrow"),
             ),
             PaneItem(
               icon: const FaIcon(FontAwesomeIcons.arrowRightArrowLeft),
               body: const AddBorrow(),
-              title: const Text("Book borrow/lend"),
+              title: const Text("Borrow / Return"),
             ),
             PaneItem(
               icon: const FaIcon(FontAwesomeIcons.gears),

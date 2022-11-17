@@ -94,6 +94,10 @@ class BooksPage extends StatelessWidget {
                   itemCount: books.length,
                   itemBuilder: (context, i) {
                     return ListTile(
+                      tileColor: books[i].isavailable
+                          ? null
+                          : ButtonState.resolveWith(
+                              (states) => Colors.orange.withOpacity(0.6)),
                       title: Row(
                         children: [
                           Expanded(
@@ -166,7 +170,6 @@ class BookPageSearchBar extends StatefulWidget {
 }
 
 class _BookPageSearchBarState extends State<BookPageSearchBar> {
-  String searchobject = "Book";
   bool isreturn = false;
   bool showicon = false;
 
@@ -190,12 +193,12 @@ class _BookPageSearchBarState extends State<BookPageSearchBar> {
               child: SizedBox(
                 height: 40,
                 child: DropDownButton(
-                  title: Text(searchobject),
+                  title: Text(booksProvider.searchType),
                   items: [
                     DropDownButtonItem(
                       onTap: () {
                         setState(() {
-                          searchobject = "Book";
+                          booksProvider.searchType = "Book";
                         });
 
                         Provider.of<BooksProvider>(context, listen: false)
@@ -207,7 +210,7 @@ class _BookPageSearchBarState extends State<BookPageSearchBar> {
                     DropDownButtonItem(
                       onTap: () {
                         setState(() {
-                          searchobject = "Staff";
+                          booksProvider.searchType = "Staff";
                         });
 
                         Provider.of<BooksProvider>(context, listen: false)
@@ -245,8 +248,9 @@ class _BookPageSearchBarState extends State<BookPageSearchBar> {
                     booksProvider.searchBooks(value);
                   },
                   minHeight: 40,
-                  placeholder:
-                      searchobject == "Book" ? 'Book name' : 'Staff name',
+                  placeholder: booksProvider.searchType == "Book"
+                      ? 'Book name'
+                      : 'Staff ID',
                   validator: (text) {
                     if (text == null || text.isEmpty) {
                       return 'Provide a book name';
@@ -255,19 +259,22 @@ class _BookPageSearchBarState extends State<BookPageSearchBar> {
                   }),
             ),
           ),
-          Expanded(
-              flex: 3,
-              child: Consumer(builder: (_, BooksProvider booksProvider, __) {
-                return ToggleSwitch(
-                  checked: booksProvider.isreturn,
-                  onChanged: (v) {
-                    booksProvider.isreturn = !booksProvider.isreturn;
-                    booksProvider
-                        .searchBooks(booksProvider.currentSearchTerm ?? "");
-                  },
-                  content: const Text('Not return'),
-                );
-              })),
+          Visibility(
+            visible: booksProvider.searchType == "Book",
+            child: Expanded(
+                flex: 3,
+                child: Consumer(builder: (_, BooksProvider booksProvider, __) {
+                  return ToggleSwitch(
+                    checked: booksProvider.isreturn,
+                    onChanged: (v) {
+                      booksProvider.isreturn = !booksProvider.isreturn;
+                      booksProvider
+                          .searchBooks(booksProvider.currentSearchTerm ?? "");
+                    },
+                    content: const Text('Not return'),
+                  );
+                })),
+          ),
         ],
       );
     });

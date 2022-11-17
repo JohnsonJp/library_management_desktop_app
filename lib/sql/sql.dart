@@ -17,7 +17,7 @@ class SqlHelper {
         'password': 'password',
         'db': 'lib_man',
         'maxConnections': 10,
-        'secure': false,
+        'secure': true,
         'prefix': '',
         'pool': false,
         'collation': 'utf8mb4_general_ci',
@@ -257,7 +257,7 @@ class SqlHelper {
     List borrow1 =
         await db.getAll(table: 'borrow', where: {'uniqueid': uniqueid});
 
-    borrowinfo = borrow1.map((e) => Borrow.fromMap(e)).toList().first;
+    borrowinfo = borrow1.map((e) => Borrow.fromMap(e)).toList().last;
     return borrowinfo;
   }
 
@@ -304,5 +304,22 @@ class SqlHelper {
 
   Future<void> importBorrow(Map<String, dynamic> borrow) async {
     await db.insert(table: 'borrow', insertData: borrow);
+  }
+
+  Future<int> getBooksCountInDB() async {
+    db = openDb();
+    int count = await db.count(table: "book", fields: "*");
+    await db.close();
+
+    return count;
+  }
+
+  Future<int> getAvailableBooksCount() async {
+    db = openDb();
+    ResultFormat query =
+        await db.query('select count(*) from book where givento is null');
+    await db.close();
+
+    return query.rows.first["count(*)"];
   }
 }

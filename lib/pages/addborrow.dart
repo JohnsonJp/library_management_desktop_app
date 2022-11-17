@@ -30,12 +30,19 @@ class _AddBorrowState extends State<AddBorrow> {
   bool staffavail = false;
 
   final barcodeReader = BarcodeReader();
+  FocusNode focusNode = FocusNode();
 
   @override
   void initState() {
     date = DateTime.now();
     redate = DateTime.now();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    focusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -49,6 +56,7 @@ class _AddBorrowState extends State<AddBorrow> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextFormBox(
+                  focusNode: focusNode,
                   autofocus: true,
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -65,7 +73,7 @@ class _AddBorrowState extends State<AddBorrow> {
                       if (book != null) {
                         istrue = true;
                         if (book.givento != null) {
-                          if (book.givento!.isNotEmpty) ;
+                          if (book.givento!.isNotEmpty)
                           {
                             isborrowed = true;
                             Borrow borrow = await SqlHelper()
@@ -121,7 +129,7 @@ class _AddBorrowState extends State<AddBorrow> {
                             validator: (text) {
                               if (text == null || text.isEmpty) {
                                 return 'Provide a Staff id';
-                              } else if (!staffavail) {
+                              } else if (!staffavail && !isborrowed) {
                                 return 'Staff Not found';
                               }
 
@@ -180,8 +188,8 @@ class _AddBorrowState extends State<AddBorrow> {
                         ),
                         TextButton(
                           child: (isborrowed)
-                              ? const Text("Borrow")
-                              : const Text("Lend"),
+                              ? const Text("Return")
+                              : const Text("Borrow"),
                           onPressed: () {
                             if (formkey.currentState!.validate()) {
                               BorrowProvider borrowProvider =
@@ -219,6 +227,14 @@ class _AddBorrowState extends State<AddBorrow> {
                                 givento: isborrowed ? null : staffid.text,
                               );
 
+                              showSimpleNotification(
+                                Text(
+                                    "${isborrowed ? "Returned" : "Borrowed"} successfully"),
+                                background: Colors.green,
+                                duration: const Duration(seconds: 2),
+                                position: NotificationPosition.bottom,
+                              );
+
                               setState(() {
                                 bookid.text = "";
                                 staffid.text = "";
@@ -226,13 +242,7 @@ class _AddBorrowState extends State<AddBorrow> {
                                 istrue = false;
                               });
 
-                              showSimpleNotification(
-                                Text(
-                                    "${isborrowed ? "Borrowed" : "Lended"} successfully"),
-                                background: Colors.green,
-                                duration: const Duration(seconds: 2),
-                                position: NotificationPosition.bottom,
-                              );
+                              focusNode.requestFocus();
                             }
                           },
                         ),
